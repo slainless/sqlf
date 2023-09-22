@@ -405,6 +405,18 @@ func (q *Stmt) OrderBy(expr ...string) *Stmt {
 	return q
 }
 
+/*
+OrderByExpr is an extended version of OrderBy method.
+But adds only one expression to SELECT statement
+compared to OrderBy which can add many in one call.
+
+	q.OrderByExpr("MATCH(title) AGAINST (? WITH QUERY EXPANSION)", "database")
+*/
+func (q *Stmt) OrderByExpr(expr string, args ...interface{}) *Stmt {
+	q.addChunk(posOrderBy, "ORDER BY", expr, args, ", ")
+	return q
+}
+
 // GroupBy adds the GROUP BY clause to SELECT statement
 func (q *Stmt) GroupBy(expr string) *Stmt {
 	q.addChunk(posGroupBy, "GROUP BY", expr, nil, ", ")
